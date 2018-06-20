@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<module>
+	<name>PagoFacil16</name>
+	<displayName><![CDATA[Pago Fácil SpA]]></displayName>
+	<version><![CDATA[1.0.0]]></version>
+	<description><![CDATA[Vende con distintos medios de pago en tu tienda de manera instantánea con Pago Fácil.]]></description>
+	<author><![CDATA[Cristian Tala]]></author>
+	<tab><![CDATA[payments_gateways]]></tab>
+	<is_configurable>1</is_configurable>
+	<need_instance>1</need_instance>
+</module>
