@@ -26,40 +26,197 @@
 
 class PagoFacil16RedirectModuleFrontController extends ModuleFrontController
 {
-    /**
-     * Do whatever you have to before redirecting the customer on the website of your payment processor.
-     */
-    public function postProcess()
-    {
-        /**
-         * Oops, an error occured.
-         */
-        if (Tools::getValue('action') == 'error') {
-            return $this->displayError('An error occurred while trying to redirect the customer');
-        } else {
-            $this->context->smarty->assign(array(
-                'cart_id' => Context::getContext()->cart->id,
-                'secure_key' => Context::getContext()->customer->secure_key,
-            ));
+    public $ssl = true;
 
-            return $this->setTemplate('redirect.tpl');
+    public function initContent()
+    {
+        // Disable left and right column
+        $this->display_column_left = false;
+        $this->display_column_right = false;
+        parent::initContent();
+
+        //Verificamos que la orden exista y que esté llenada de manera adecuada.
+        $cart = $this->context->cart;
+        if ($cart->id_customer == 0 || $cart->id_address_delivery == 0 || $cart->id_address_invoice == 0 || !$this->module->active) {
+            Tools::redirect('index.php?controller=order&step=1');
         }
+
+        // Check if module is enabled
+        $authorized = false;
+        foreach (Module::getPaymentModules() as $module) {
+            if ($module['name'] == $this->module->name) {
+                $authorized = true;
+            }
+        }
+
+        /*
+         * Si el módulo no permite el pago con el currency actual detenemos el proceso.
+         */
+        if (!$authorized) {
+            die($this->module->l('This payment method is not available.', 'validation'));
+        }
+
+        /*
+         * No deberíamos haber llegado acá sin un cliente. Sólo por precaución.
+         */
+        $customer = new Customer($cart->id_customer);
+        if (!Validate::isLoadedObject($customer)) {
+            Tools::redirect('index.php?controller=order&step=1');
+        }
+
+        // Set datas
+        $currency = $this->context->currency;
+        $total = (float) $cart->getOrderTotal(true, Cart::BOTH);
+        $extra_vars = array();
+
+
+
+        /*
+         *  Validate order
+         *  El estado de esta orden es el nuevo estado pendiente.
+         */
+        $this->module->validateOrder($cart->id, Configuration::get('PS_OS_PAGOFACIL_PENDING_PAYMENT'), $total, $this->module->displayName, null, $extra_vars, (int) $currency->id, false, $customer->secure_key);
+
+
+        /*
+         * Obtenemos los datos a ocupar para la transacción con Pago Fácil
+         */
+        $config = Configuration::getMultiple(array('PAGOFACIL16_TOKEN_SERVICE', 'PAGOFACIL16_TOKEN_SECRET','PAGOFACIL16_ES_DEVEL'));
+        $token_service = $config['PAGOFACIL16_TOKEN_SERVICE'];
+        $token_secret = $config['PAGOFACIL16_TOKEN_SECRET'];
+        $esDevel = $config['PAGOFACIL16_ES_DEVEL'];
+
+        $cart = $this->context->cart;
+        $total = $cart->getOrderTotal(true, Cart::BOTH);
+
+        /*
+         * Order existe desde después del validateOrder
+         */
+        $order = Order::getOrderByCartId((int) ($cart->id));
+
+        /*
+         * Datos para la transacción.
+         * TODO : Generar token random.
+         */
+
+        $callbackUrl = $this->context->link->getModuleLink('PagoFacil16', 'callback');
+        $returnUrl = $this->context->link->getModuleLink('PagoFacil16', 'confirmation');
+        $cancelUrl = __PS_BASE_URI__;
+
+        $pago_args = [
+          "ct_order_id" => $order,
+          "ct_token_tienda" => md5($order.$token_secret),
+          "ct_monto" => round($total),
+          "ct_token_service" => $token_service,
+          "ct_email" => $customer->email,
+          "ct_currency" =>  $currency->iso_code,
+          "ct_url_callback" => $callbackUrl,
+          "ct_url_complete" => $returnUrl,
+          "ct_url_cancel" => $cancelUrl
+        ];
+
+        $pago_args["ct_signature"] = $this->firmarArreglo($pago_args, $token_secret);
+
+
+
+
+        print_r($pago_args);
+
+        $curl = new Curl\Curl();
+        $curl->post('https://t.pagofacil.xyz/v1', $pago_args);
+
+        if ($curl->error) {
+            die($curl->error_code);
+        } else {
+            // echo $curl->response;
+            $result = json_decode($curl->response, true);
+        }
+
+
+        // var_dump($curl->request_headers);
+        // var_dump($curl->response_headers);
+        // echo "<pre>";
+        // print_r($result);
+        // echo "</pre>";
+        // $curl->close();
+
+
+        // die();
+        Tools::redirect($result["redirect"]);
+
+        //Obtener los Endpoints
+        // echo "<br>";
+        // $curl = new Curl\Curl();
+        // $curl->setHeader('X-TRANSACTION', $result["transactionId"]);
+        // $curl->setHeader('X-CURRENCY', "CLP");
+        // $curl->setHeader('X-SERVICE', $token_service);
+        //
+        // $curl->get("https://t.pagofacil.xyz/v1/services");
+        // if ($curl->error) {
+        //     die ($curl->error_code);
+        // } else {
+        //     // echo $curl->response;
+        //     $extServices = json_decode($curl->response, true);
+        // }
+
+        // var_dump($curl->request_headers);
+        // var_dump($curl->response_headers);
+        // echo "<pre>";
+        // print_r($result);
+        // echo "</pre>";
+
+        /* @var $smarty Smarty */
+        // $smarty = $this->context->smarty;
+        // $datos = array(
+        //     'servicios' => $extServices["externalServices"],
+        //     'transactionId' => $result["transactionId"],
+        //     'nbProducts' => $cart->nbProducts(),
+        //     'cust_currency' => $cart->id_currency,
+        //     'currencies' => $this->module->getCurrency((int) $cart->id_currency),
+        //     'total' => $total,
+        //     'this_path' => $this->module->getPathUri(),
+        //     'this_path_bw' => $this->module->getPathUri(),
+        //     'this_path_ssl' => Tools::getShopDomainSsl(true, true) . __PS_BASE_URI__ . 'modules/' . $this->module->name . '/'
+        // );
+        // $smarty->assign($datos);
+        //
+        //
+        //
+        // return $this->setTemplate('redirect.tpl');
+        // die();
     }
 
-    protected function displayError($message, $description = false)
+    public function firmarArreglo($arreglo, $secret)
     {
-        /**
-         * Create the breadcrumb for your ModuleFrontController.
-         */
-        $this->context->smarty->assign('path', '
-			<a href="'.$this->context->link->getPageLink('order', null, null, 'step=3').'">'.$this->module->l('Payment').'</a>
-			<span class="navigation-pipe">&gt;</span>'.$this->module->l('Error'));
 
-        /**
-         * Set error message and description for the template.
-         */
-        array_push($this->errors, $this->module->l($message), $description);
+        //Ordeno Arreglo
+        ksort($arreglo);
+        //Concateno Arreglo
+        $mensaje = $this->concatenarArreglo($arreglo);
 
-        return $this->setTemplate('error.tpl');
+        //Firmo Mensaje
+        $mensajeFirmado = $this->firmarMensaje($mensaje, $secret);
+
+        //Guardo y retorno el mensaje firmado
+        $this->ct_firma = $mensajeFirmado;
+        return $mensajeFirmado;
     }
+
+    public function firmarMensaje($mensaje, $claveCifrado)
+    {
+        $mensajeFirmado = hash_hmac('sha256', $mensaje, $claveCifrado);
+        return $mensajeFirmado;
+    }
+
+    public function concatenarArreglo($arreglo)
+    {
+        $resultado = "";
+
+        foreach ($arreglo as $field => $value) {
+            $resultado .= $field . $value;
+        }
+
+        return $resultado;
+    }
+    //
 }

@@ -25,7 +25,7 @@
 
 <div class="panel">
 	<div class="row PagoFacil16-header">
-		<img src="{$module_dir|escape:'html':'UTF-8'}views/img/template_1_logo.png" class="col-xs-6 col-md-4 text-center" id="payment-logo" />
+		<img src="{$module_dir|escape:'html':'UTF-8'}views/img/pf_logo.png" class="col-xs-6 col-md-4 text-center" id="payment-logo" />
 		<div class="col-xs-6 col-md-4 text-center">
 			<h4>{l s='Online payment processing' mod='PagoFacil16'}</h4>
 			<h4>{l s='Fast - Secure - Reliable' mod='PagoFacil16'}</h4>
@@ -37,7 +37,7 @@
 	</div>
 
 	<hr />
-	
+
 	<div class="PagoFacil16-content">
 		<div class="row">
 			<div class="col-md-6">
@@ -45,18 +45,18 @@
 				<dl>
 					<dt>&middot; {l s='Increase customer payment options' mod='PagoFacil16'}</dt>
 					<dd>{l s='Visa®, Mastercard®, Diners Club®, American Express®, Discover®, Network and CJB®, plus debit, gift cards and more.' mod='PagoFacil16'}</dd>
-					
+
 					<dt>&middot; {l s='Help to improve cash flow' mod='PagoFacil16'}</dt>
 					<dd>{l s='Receive funds quickly from the bank of your choice.' mod='PagoFacil16'}</dd>
-					
+
 					<dt>&middot; {l s='Enhanced security' mod='PagoFacil16'}</dt>
 					<dd>{l s='Multiple firewalls, encryption protocols and fraud protection.' mod='PagoFacil16'}</dd>
-					
+
 					<dt>&middot; {l s='One-source solution' mod='PagoFacil16'}</dt>
 					<dd>{l s='Conveniance of one invoice, one set of reports and one 24/7 customer service contact.' mod='PagoFacil16'}</dd>
 				</dl>
 			</div>
-			
+
 			<div class="col-md-6">
 				<h5>{l s='FREE My Payment Module Glocal Gateway (Value of 400$)' mod='PagoFacil16'}</h5>
 				<ul>
@@ -76,11 +76,11 @@
 		</div>
 
 		<hr />
-		
+
 		<div class="row">
 			<div class="col-md-12">
 				<h4>{l s='Accept payments in the United States using all major credit cards' mod='PagoFacil16'}</h4>
-				
+
 				<div class="row">
 					<img src="{$module_dir|escape:'html':'UTF-8'}views/img/template_1_cards.png" class="col-md-6" id="payment-logo" />
 					<div class="col-md-6">

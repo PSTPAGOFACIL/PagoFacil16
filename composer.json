@@ -1,0 +1,7 @@
+{
+    "require": {
+        "curl/curl": "^1.9",
+        "ctala/transaccion-default": "V0.1.12.3",
+        "ctala/http-helper": "dev-master"
+    }
+}

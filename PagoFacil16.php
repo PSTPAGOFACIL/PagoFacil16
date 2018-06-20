@@ -28,6 +28,8 @@ if (!defined('_PS_VERSION_')) {
     exit;
 }
 
+include_once 'vendor/autoload.php';
+
 class PagoFacil16 extends PaymentModule
 {
     protected $config_form = false;
@@ -35,8 +37,8 @@ class PagoFacil16 extends PaymentModule
     public $token_service;
     public $esDevel;
     public $token_secret;
-    public $server_desarrollo = "https://dev-env.sv1.tbk.cristiantala.cl/tbk/v2/initTransaction";
-    public $server_produccion = "https://sv1.tbk.cristiantala.cl/tbk/v2/initTransaction";
+    public $server_desarrollo = "https://t.pgf.cl/v1";
+    public $server_produccion = "https://t.pgf.cl/v1";
 
     public function __construct()
     {
@@ -317,6 +319,7 @@ class PagoFacil16 extends PaymentModule
 
         return $this->display(__FILE__, 'views/templates/hook/confirmation.tpl');
     }
+
     public function installOrderState() {
         if (Configuration::get('PS_OS_PAGOFACIL_PENDING_PAYMENT') < 1) {
             $order_state = new OrderState();
