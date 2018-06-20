@@ -23,29 +23,11 @@
 *  International Registered Trademark & Property of PrestaShop SA
 *}
 
-<!-- <div class="row">
-	<div class="col-xs-12 col-md-6">
-		<p class="payment_module" id="PagoFacil16_payment_button">
-			{if $cart->getOrderTotal() < 2}
-				<a href="">
-					<img src="{$domain|cat:$payment_button|escape:'html':'UTF-8'}" alt="{l s='Pay with my payment module' mod='PagoFacil16'}" />
-					{l s='Minimum amount required in order to pay with my payment module:' mod='PagoFacil16'} {convertPrice price=2}
-				</a>
-			{else}
-				<a href="{$link->getModuleLink('PagoFacil16', 'redirect', array(), true)|escape:'htmlall':'UTF-8'}" title="{l s='Pay with my payment module' mod='PagoFacil16'}">
-					<img src="{$module_dir|escape:'htmlall':'UTF-8'}/logo.png" alt="{l s='Pay with my payment module' mod='PagoFacil16'}" width="32" height="32" />
-					{l s='Pay with my payment module' mod='PagoFacil16'}
-				</a>
-			{/if}
-		</p>
-	</div>
-</div> -->
 
 <div class="row">
     <div class="col-xs-12">
         <p class="payment_module">
-            <a class="bankwire" href="{$link->getModuleLink('PagoFacil16', 'redirect')|escape:'html'}" title="Pago con Tarjetas de crédito y débito.">
-<img src="{$module_dir|escape:'htmlall':'UTF-8'}/logo.png" alt="{l s='Pay with my payment module' mod='PagoFacil16'}" width="32" height="32" />
+            <a class="pagofacil" href="{$link->getModuleLink('PagoFacil16', 'redirect')|escape:'html'}" title="Pago con Tarjetas de crédito y débito.">
                 Paga a través de Pago Fácil. <span>(el pedido será procesado automáticamente)</span>
             </a>
         </p>
