@@ -120,7 +120,7 @@ class PagoFacil16RedirectModuleFrontController extends ModuleFrontController
 
 
 
-        print_r($pago_args);
+        error_log(print_r($pago_args));
 
         $curl = new Curl\Curl();
         $curl->post('https://t.pagofacil.xyz/v1', $pago_args);
