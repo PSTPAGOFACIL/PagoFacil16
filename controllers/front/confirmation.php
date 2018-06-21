@@ -38,25 +38,8 @@ class PagoFacil16ConfirmationModuleFrontController extends ModuleFrontController
         $cart = new Cart((int)$cart_id);
         $customer = new Customer((int)$cart->id_customer);
 
-        /**
-         * Since it's an example we are validating the order right here,
-         * You should not do it this way in your own module.
-         */
-        $payment_status = Configuration::get('PS_OS_PAYMENT'); // Default value for a payment that succeed.
-        $message = null; // You can add a comment directly into the order so the merchant will see it in the BO.
-
-        /**
-         * Converting cart into a valid order
-         */
-
-        $module_name = $this->module->displayName;
-        $currency_id = (int)Context::getContext()->currency->id;
-
-        $this->module->validateOrder($cart_id, $payment_status, $cart->getOrderTotal(), $module_name, $message, array(), $currency_id, false, $secure_key);
-
-        /**
-         * If the order has been validated we try to retrieve it
-         */
+   
+       
         $order_id = Order::getOrderByCartId((int)$cart->id);
 
         if ($order_id && ($secure_key == $customer->secure_key)) {

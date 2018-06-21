@@ -60,9 +60,12 @@ class PagoFacil16RedirectModuleFrontController extends ModuleFrontController
          * No deberíamos haber llegado acá sin un cliente. Sólo por precaución.
          */
         $customer = new Customer($cart->id_customer);
+               
         if (!Validate::isLoadedObject($customer)) {
             Tools::redirect('index.php?controller=order&step=1');
         }
+        
+
 
         // Set datas
         $currency = $this->context->currency;
@@ -85,6 +88,8 @@ class PagoFacil16RedirectModuleFrontController extends ModuleFrontController
         $token_service = $config['PAGOFACIL16_TOKEN_SERVICE'];
         $token_secret = $config['PAGOFACIL16_TOKEN_SECRET'];
         $esDevel = $config['PAGOFACIL16_ES_DEVEL'];
+        $secure_key = $customer->secure_key;
+        $cart_id = $cart->id;
 
         $cart = $this->context->cart;
         $total = $cart->getOrderTotal(true, Cart::BOTH);
@@ -100,7 +105,7 @@ class PagoFacil16RedirectModuleFrontController extends ModuleFrontController
          */
 
         $callbackUrl = $this->context->link->getModuleLink('PagoFacil16', 'callback');
-        $returnUrl = $this->context->link->getModuleLink('PagoFacil16', 'confirmation');
+        $returnUrl = $this->context->link->getModuleLink('PagoFacil16', 'confirmation')."&secure_key=$secure_key&cart_id=$cart_id";
         $cancelUrl = __PS_BASE_URI__;
 
         $pago_args = [
