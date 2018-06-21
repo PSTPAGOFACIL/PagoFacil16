@@ -91,7 +91,6 @@ class PagoFacil16RedirectModuleFrontController extends ModuleFrontController
         $secure_key = $customer->secure_key;
         $cart_id = $cart->id;
 
-        $cart = $this->context->cart;
         $total = $cart->getOrderTotal(true, Cart::BOTH);
 
         /*
