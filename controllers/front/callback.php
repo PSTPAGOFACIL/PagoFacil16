@@ -18,6 +18,7 @@
  *
  * @author Cristian Tala <yomismo@cristiantala.cl>
  * @copyright 2007-2018 Pago Fácil SpA
+ * @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 
 class PagoFacil16CallbackModuleFrontController extends ModuleFrontController
