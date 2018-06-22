@@ -103,8 +103,8 @@ class PagoFacil16RedirectModuleFrontController extends ModuleFrontController
          * TODO : Generar token random.
          */
 
-        $callbackUrl = $this->context->link->getModuleLink('PagoFacil16', 'callback');
-        $returnUrl = $this->context->link->getModuleLink('PagoFacil16', 'confirmation')."&secure_key=$secure_key&cart_id=$cart_id";
+        $callbackUrl = $this->context->link->getModuleLink('pagofacil16', 'callback');
+        $returnUrl = $this->context->link->getModuleLink('pagofacil16', 'confirmation')."&secure_key=$secure_key&cart_id=$cart_id";
         $cancelUrl = __PS_BASE_URI__;
 
         $pago_args = [
@@ -121,13 +121,18 @@ class PagoFacil16RedirectModuleFrontController extends ModuleFrontController
 
         $pago_args["ct_signature"] = $this->firmarArreglo($pago_args, $token_secret);
 
-
-
-
         error_log(print_r($pago_args));
 
         $curl = new Curl\Curl();
-        $curl->post('https://t.pagofacil.xyz/v1', $pago_args);
+        if($esDevel)
+        {
+            $curl->post(PF_SERVER_DESARROLLO, $pago_args);
+        }
+        else
+        {
+            $curl->post(PF_SERVER_PRODUCCION, $pago_args);
+        }
+
 
         if ($curl->error) {
             die($curl->error_code);
@@ -136,58 +141,8 @@ class PagoFacil16RedirectModuleFrontController extends ModuleFrontController
             $result = json_decode($curl->response, true);
         }
 
-
-        // var_dump($curl->request_headers);
-        // var_dump($curl->response_headers);
-        // echo "<pre>";
-        // print_r($result);
-        // echo "</pre>";
-        // $curl->close();
-
-
-        // die();
         Tools::redirect($result["redirect"]);
 
-        //Obtener los Endpoints
-        // echo "<br>";
-        // $curl = new Curl\Curl();
-        // $curl->setHeader('X-TRANSACTION', $result["transactionId"]);
-        // $curl->setHeader('X-CURRENCY', "CLP");
-        // $curl->setHeader('X-SERVICE', $token_service);
-        //
-        // $curl->get("https://t.pagofacil.xyz/v1/services");
-        // if ($curl->error) {
-        //     die ($curl->error_code);
-        // } else {
-        //     // echo $curl->response;
-        //     $extServices = json_decode($curl->response, true);
-        // }
-
-        // var_dump($curl->request_headers);
-        // var_dump($curl->response_headers);
-        // echo "<pre>";
-        // print_r($result);
-        // echo "</pre>";
-
-        /* @var $smarty Smarty */
-        // $smarty = $this->context->smarty;
-        // $datos = array(
-        //     'servicios' => $extServices["externalServices"],
-        //     'transactionId' => $result["transactionId"],
-        //     'nbProducts' => $cart->nbProducts(),
-        //     'cust_currency' => $cart->id_currency,
-        //     'currencies' => $this->module->getCurrency((int) $cart->id_currency),
-        //     'total' => $total,
-        //     'this_path' => $this->module->getPathUri(),
-        //     'this_path_bw' => $this->module->getPathUri(),
-        //     'this_path_ssl' => Tools::getShopDomainSsl(true, true) . __PS_BASE_URI__ . 'modules/' . $this->module->name . '/'
-        // );
-        // $smarty->assign($datos);
-        //
-        //
-        //
-        // return $this->setTemplate('redirect.tpl');
-        // die();
     }
 
     public function firmarArreglo($arreglo, $secret)

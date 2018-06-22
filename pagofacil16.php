@@ -30,19 +30,23 @@ if (!defined('_PS_VERSION_')) {
 
 include_once 'vendor/autoload.php';
 
-class PagoFacil16 extends PaymentModule
+define("PF_SERVER_DESARROLLO", "https://t.pagofacil.xyz/v1");
+define("PF_SERVER_PRODUCCION", "https://t.pgf.cl/v1");
+
+
+
+class pagofacil16 extends PaymentModule
 {
     protected $config_form = false;
 
     public $token_service;
     public $esDevel;
     public $token_secret;
-    public $server_desarrollo = "https://t.pgf.cl/v1";
-    public $server_produccion = "https://t.pgf.cl/v1";
+
 
     public function __construct()
     {
-        $this->name = 'PagoFacil16';
+        $this->name = 'pagofacil16';
         $this->tab = 'payments_gateways';
         $this->version = '1.0.0';
         $this->author = 'Cristian Tala';
@@ -53,10 +57,6 @@ class PagoFacil16 extends PaymentModule
          */
         $this->bootstrap = true;
 
-        // $this->controllers = array('payment', 'validation');
-        // $this->is_eu_compatible = 0;
-        // $this->currencies = true;
-        // $this->currencies_mode = 'checkbox';
 
         $config = Configuration::getMultiple(array('PAGOFACIL16_TOKEN_SERVICE', 'PAGOFACIL16_TOKEN_SECRET','PAGOFACIL16_ES_DEVEL'));
         if (!empty($config['PAGOFACIL16_TOKEN_SERVICE'])) {
@@ -103,7 +103,7 @@ class PagoFacil16 extends PaymentModule
             return false;
         }
 
-        Configuration::updateValue('PAGOFACIL16_ES_DEVEL', true);
+        Configuration::updateValue('PAGOFACIL16_ES_DEVEL', false);
 
 
         /*
@@ -118,14 +118,13 @@ class PagoFacil16 extends PaymentModule
             $this->registerHook('backOfficeHeader') &&
             $this->registerHook('payment') &&
             $this->registerHook('paymentReturn');
-            // $this->registerHook('displayPayment') &&
-            // $this->registerHook('displayPaymentReturn');
+
     }
 
     public function uninstall()
     {
-        // Configuration::deleteByName('PAGOFACIL16_ES_DEVEL');
-        // Configuration::deleteByName('PAGOFACIL16_TOKEN_SECRET');
+         Configuration::deleteByName('PAGOFACIL16_ES_DEVEL');
+         Configuration::deleteByName('PAGOFACIL16_TOKEN_SECRET');
 
         return parent::uninstall();
     }

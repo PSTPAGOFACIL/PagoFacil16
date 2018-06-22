@@ -24,19 +24,19 @@
 *}
 
 {if (isset($status) == true) && ($status == 'ok')}
-<h3>{l s='Your order on %s is complete.' sprintf=$shop_name mod='PagoFacil16'}</h3>
+<h3>{l s='Your order on %s is complete.' sprintf=$shop_name mod='pagofacil16'}</h3>
 <p>
-	<br />- {l s='Amount' mod='PagoFacil16'} : <span class="price"><strong>{$total|escape:'htmlall':'UTF-8'}</strong></span>
-	<br />- {l s='Reference' mod='PagoFacil16'} : <span class="reference"><strong>{$reference|escape:'html':'UTF-8'}</strong></span>
-	<br /><br />{l s='An email has been sent with this information.' mod='PagoFacil16'}
-	<br /><br />{l s='If you have questions, comments or concerns, please contact our' mod='PagoFacil16'} <a href="{$link->getPageLink('contact', true)|escape:'html':'UTF-8'}">{l s='expert customer support team.' mod='PagoFacil16'}</a>
+	<br />- {l s='Amount' mod='pagofacil16'} : <span class="price"><strong>{$total|escape:'htmlall':'UTF-8'}</strong></span>
+	<br />- {l s='Reference' mod='pagofacil16'} : <span class="reference"><strong>{$reference|escape:'html':'UTF-8'}</strong></span>
+	<br /><br />{l s='An email has been sent with this information.' mod='pagofacil16'}
+	<br /><br />{l s='If you have questions, comments or concerns, please contact our' mod='pagofacil16'} <a href="{$link->getPageLink('contact', true)|escape:'html':'UTF-8'}">{l s='expert customer support team.' mod='pagofacil16'}</a>
 </p>
 {else}
-<h3>{l s='Your order on %s has not been accepted.' sprintf=$shop_name mod='PagoFacil16'}</h3>
+<h3>{l s='Your order on %s has not been accepted.' sprintf=$shop_name mod='pagofacil16'}</h3>
 <p>
-	<br />- {l s='Reference' mod='PagoFacil16'} <span class="reference"> <strong>{$reference|escape:'html':'UTF-8'}</strong></span>
-	<br /><br />{l s='Please, try to order again.' mod='PagoFacil16'}
-	<br /><br />{l s='If you have questions, comments or concerns, please contact our' mod='PagoFacil16'} <a href="{$link->getPageLink('contact', true)|escape:'html':'UTF-8'}">{l s='expert customer support team.' mod='PagoFacil16'}</a>
+	<br />- {l s='Reference' mod='pagofacil16'} <span class="reference"> <strong>{$reference|escape:'html':'UTF-8'}</strong></span>
+	<br /><br />{l s='Please, try to order again.' mod='pagofacil16'}
+	<br /><br />{l s='If you have questions, comments or concerns, please contact our' mod='pagofacil16'} <a href="{$link->getPageLink('contact', true)|escape:'html':'UTF-8'}">{l s='expert customer support team.' mod='pagofacil16'}</a>
 </p>
 {/if}
 <hr />

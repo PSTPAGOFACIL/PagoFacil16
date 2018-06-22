@@ -24,71 +24,66 @@
 *}
 
 <div class="panel">
-	<div class="row PagoFacil16-header">
-		<img src="{$module_dir|escape:'html':'UTF-8'}views/img/pf_logo.png" class="col-xs-6 col-md-4 text-center" id="payment-logo" />
-		<div class="col-xs-6 col-md-4 text-center">
-			<h4>{l s='Online payment processing' mod='PagoFacil16'}</h4>
-			<h4>{l s='Fast - Secure - Reliable' mod='PagoFacil16'}</h4>
-		</div>
-		<div class="col-xs-12 col-md-4 text-center">
-			<a href="#" onclick="javascript:return false;" class="btn btn-primary" id="create-account-btn">{l s='Create an account now!' mod='PagoFacil16'}</a><br />
-			{l s='Already have an account?' mod='PagoFacil16'}<a href="#" onclick="javascript:return false;"> {l s='Log in' mod='PagoFacil16'}</a>
-		</div>
-	</div>
+    <div class="row PagoFacil16-header">
+        <a href="https://www.pagofacil.cl" target="_blank">
+            <img src="{$module_dir|escape:'html':'UTF-8'}views/img/pf_logo.png" class="col-xs-6 col-md-4 text-center"
+                 id="payment-logo"/>
+        </a>
+        <div class="col-xs-6 col-md-4 text-center">
+            <h4>{l s='Servicio de ventas y recaudación online.' mod='pagofacil16'}</h4>
+            <h4>{l s='Rápido - Seguro - Confiable' mod='pagofacil16'}</h4>
+        </div>
+        <div class="col-xs-12 col-md-4 text-center">
+            <a href="https://dashboard.pagofacil.org" target="_blank" class="btn btn-primary"
+               id="create-account-btn">{l s='Crea tu cuenta ahora!' mod='pagofacil16'}</a><br/>
 
-	<hr />
+        </div>
+    </div>
 
-	<div class="PagoFacil16-content">
-		<div class="row">
-			<div class="col-md-6">
-				<h5>{l s='My payment module offers the following benefits' mod='PagoFacil16'}</h5>
-				<dl>
-					<dt>&middot; {l s='Increase customer payment options' mod='PagoFacil16'}</dt>
-					<dd>{l s='Visa®, Mastercard®, Diners Club®, American Express®, Discover®, Network and CJB®, plus debit, gift cards and more.' mod='PagoFacil16'}</dd>
+    <hr/>
 
-					<dt>&middot; {l s='Help to improve cash flow' mod='PagoFacil16'}</dt>
-					<dd>{l s='Receive funds quickly from the bank of your choice.' mod='PagoFacil16'}</dd>
+    <div class="PagoFacil16-content">
+        <div class="row">
+            <div class="col-md-12">
+                <h5>{l s='Ofrecemos los siguientes beneficios : ' mod='pagofacil16'}</h5>
+                <dl>
+                    <dt>&middot; {l s='Incrementa las opciones de pago' mod='pagofacil16'}</dt>
+                    <dd>{l s='Visa®, Mastercard®, Diners Club®, American Express®, Khipu, MultiCaja Transferencias, MultiCaja Efectivo, y muchas más.' mod='pagofacil16'}</dd>
 
-					<dt>&middot; {l s='Enhanced security' mod='PagoFacil16'}</dt>
-					<dd>{l s='Multiple firewalls, encryption protocols and fraud protection.' mod='PagoFacil16'}</dd>
+                    <dt>&middot; {l s='Ayudamos a mejorar el flujo de caja' mod='pagofacil16'}</dt>
+                    <dd>{l s='Recibe el dinero rápidamente en el banco de tu elección.' mod='pagofacil16'}</dd>
 
-					<dt>&middot; {l s='One-source solution' mod='PagoFacil16'}</dt>
-					<dd>{l s='Conveniance of one invoice, one set of reports and one 24/7 customer service contact.' mod='PagoFacil16'}</dd>
-				</dl>
-			</div>
+                    <dt>&middot; {l s='Seguridad avanzada' mod='pagofacil16'}</dt>
+                    <dd>{l s='Comunicación encriptada y herramientas anti fraudes.' mod='pagofacil16'}</dd>
 
-			<div class="col-md-6">
-				<h5>{l s='FREE My Payment Module Glocal Gateway (Value of 400$)' mod='PagoFacil16'}</h5>
-				<ul>
-					<li>{l s='Simple, secure and reliable solution to process online payments' mod='PagoFacil16'}</li>
-					<li>{l s='Virtual terminal' mod='PagoFacil16'}</li>
-					<li>{l s='Reccuring billing' mod='PagoFacil16'}</li>
-					<li>{l s='24/7/365 customer support' mod='PagoFacil16'}</li>
-					<li>{l s='Ability to perform full or patial refunds' mod='PagoFacil16'}</li>
-				</ul>
-				<br />
-				<em class="text-muted small">
-					* {l s='New merchant account required and subject to credit card approval.' mod='PagoFacil16'}
-					{l s='The free My Payment Module Global Gateway will be accessed through log in information provided via email within 48 hours.' mod='PagoFacil16'}
-					{l s='Monthly fees for My Payment Module Global Gateway will apply.' mod='PagoFacil16'}
-				</em>
-			</div>
-		</div>
+                    <dt>&middot; {l s='Solución única en pagos.' mod='pagofacil16'}</dt>
+                    <dd>{l s='Plataforma de reportes 24/7.' mod='pagofacil16'}</dd>
+                </dl>
+                <em class="text-muted small">
+                    * {l s='Los nuevos usuarios deben de ser aprobados.' mod='pagofacil16'}
+                    {l s='Nos reservamos el derecho de dar el servicio a los clientes que no sigan los valores de nuestra empresa.' mod='pagofacil16'}
+                    {l s='Existe una comisión asociada a los pagos dependiendo del nivel de ventas' mod='pagofacil16'}
+                </em>
+            </div>
 
-		<hr />
 
-		<div class="row">
-			<div class="col-md-12">
-				<h4>{l s='Accept payments in the United States using all major credit cards' mod='PagoFacil16'}</h4>
+        </div>
 
-				<div class="row">
-					<img src="{$module_dir|escape:'html':'UTF-8'}views/img/template_1_cards.png" class="col-md-6" id="payment-logo" />
-					<div class="col-md-6">
-						<h6 class="text-branded">{l s='For transactions in US Dollars (USD) only' mod='PagoFacil16'}</h6>
-						<p class="text-branded">{l s='Call 888-888-1234 if you have any questions or need more information!' mod='PagoFacil16'}</p>
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
+        <hr/>
+
+        <div class="row">
+            <div class="col-md-12">
+                <h4>{l s='Acepta pagos con los medios más populares del país' mod='pagofacil16'}</h4>
+
+                <div class="row">
+                    <img src="{$module_dir|escape:'html':'UTF-8'}views/img/template_1_cards.png" class="col-md-6"
+                         id="payment-logo"/>
+                    <div class="col-md-6">
+                        <h6 class="text-branded">{l s='Para transacciones en pesos chilenos (CLP).' mod='pagofacil16'}</h6>
+                        <p class="text-branded">{l s='¿Dudas o consultas? : ' mod='pagofacil16'} <a target="_blank" href="mailto:info@pagofacil.cl">info@pagofacil.cl</a></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>

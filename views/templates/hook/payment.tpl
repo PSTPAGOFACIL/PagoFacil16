@@ -27,7 +27,7 @@
 <div class="row">
     <div class="col-xs-12">
         <p class="payment_module">
-            <a class="pagofacil" href="{$link->getModuleLink('PagoFacil16', 'redirect')|escape:'html'}" title="Pago con Tarjetas de crédito y débito.">
+            <a class="pagofacil" href="{$link->getModuleLink('pagofacil16', 'redirect')|escape:'html'}" title="Pago con Tarjetas de crédito y débito.">
                 Paga a través de Pago Fácil. <span>(el pedido será procesado automáticamente)</span>
             </a>
         </p>

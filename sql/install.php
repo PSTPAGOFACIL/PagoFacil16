@@ -26,7 +26,7 @@
 
 $sql = array();
 
-$sql[] = 'CREATE TABLE IF NOT EXISTS `'._DB_PREFIX_.'PagoFacil16` (
+$sql[] = 'CREATE TABLE IF NOT EXISTS `'._DB_PREFIX_.'pagofacil16` (
     `id_PagoFacil16` int(11) NOT NULL AUTO_INCREMENT,
     PRIMARY KEY  (`id_PagoFacil16`)
 ) ENGINE='._MYSQL_ENGINE_.' DEFAULT CHARSET=utf8;';
