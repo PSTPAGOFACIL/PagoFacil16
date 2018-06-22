@@ -107,7 +107,7 @@ class PagoFacil16RedirectModuleFrontController extends ModuleFrontController
         $returnUrl = $this->context->link->getModuleLink('pagofacil16', 'confirmation')."&secure_key=$secure_key&cart_id=$cart_id";
         $cancelUrl = __PS_BASE_URI__;
 
-        $pago_args = [
+        $pago_args = array (
           "ct_order_id" => $order,
           "ct_token_tienda" => md5($order.$token_secret),
           "ct_monto" => round($total),
@@ -117,7 +117,7 @@ class PagoFacil16RedirectModuleFrontController extends ModuleFrontController
           "ct_url_callback" => $callbackUrl,
           "ct_url_complete" => $returnUrl,
           "ct_url_cancel" => $cancelUrl
-        ];
+        );
 
         $pago_args["ct_signature"] = $this->firmarArreglo($pago_args, $token_secret);
 

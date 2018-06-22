@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <module>
-	<name>PagoFacil16</name>
+	<name>pagofacil16</name>
 	<displayName><![CDATA[Pago Fácil SpA]]></displayName>
 	<version><![CDATA[1.0.0]]></version>
 	<description><![CDATA[Vende con distintos medios de pago en tu tienda de manera instantánea con Pago Fácil.]]></description>

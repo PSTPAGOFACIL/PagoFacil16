@@ -1,6 +1,6 @@
 <?php
 
-/*
+/**
  * Copyright 2017 Cristian Tala <yomismo@cristiantala.cl>.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -31,7 +31,7 @@ class PagoFacil16CallbackModuleFrontController extends ModuleFrontController
 
     public function initContent()
     {
-        $json_params = file_get_contents("php://input");
+        $json_params = Tools::file_get_contents("php://input");
         $json = json_decode($json_params,true);
         
 //        error_log(print_r($json,true));
