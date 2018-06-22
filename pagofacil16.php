@@ -56,7 +56,11 @@ class PagoFacil16 extends PaymentModule
         $this->bootstrap = true;
 
 
-        $config = Configuration::getMultiple(array('PAGOFACIL16_TOKEN_SERVICE', 'PAGOFACIL16_TOKEN_SECRET', 'PAGOFACIL16_ES_DEVEL'));
+        $config = Configuration::getMultiple(array(
+            'PAGOFACIL16_TOKEN_SERVICE',
+            'PAGOFACIL16_TOKEN_SECRET',
+            'PAGOFACIL16_ES_DEVEL'
+        ));
         if (!empty($config['PAGOFACIL16_TOKEN_SERVICE'])) {
             $this->token_service = $config['PAGOFACIL16_TOKEN_SERVICE'];
         }
@@ -105,10 +109,9 @@ class PagoFacil16 extends PaymentModule
 
 
         /*
-               * Generamos el nuevo estado de orden
-               */
-        if (!$this->installOrderState())
-        {
+        * Generamos el nuevo estado de orden
+        */
+        if (!$this->installOrderState()) {
             return false;
         }
 
