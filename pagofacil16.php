@@ -120,7 +120,6 @@ class PagoFacil16 extends PaymentModule
             $this->registerHook('backOfficeHeader') &&
             $this->registerHook('payment') &&
             $this->registerHook('paymentReturn');
-
     }
 
     public function uninstall()
@@ -293,7 +292,6 @@ class PagoFacil16 extends PaymentModule
         $this->smarty->assign('module_dir', $this->_path);
 
         return $this->display(__FILE__, 'views/templates/hook/payment.tpl');
-
     }
 
     /**
@@ -346,5 +344,4 @@ class PagoFacil16 extends PaymentModule
         }
         return true;
     }
-
 }

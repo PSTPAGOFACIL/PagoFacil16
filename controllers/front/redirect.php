@@ -1,28 +1,28 @@
 <?php
 /**
-* 2007-2018 PrestaShop
-*
-* NOTICE OF LICENSE
-*
-* This source file is subject to the Academic Free License (AFL 3.0)
-* that is bundled with this package in the file LICENSE.txt.
-* It is also available through the world-wide-web at this URL:
-* http://opensource.org/licenses/afl-3.0.php
-* If you did not receive a copy of the license and are unable to
-* obtain it through the world-wide-web, please send an email
-* to license@prestashop.com so we can send you a copy immediately.
-*
-* DISCLAIMER
-*
-* Do not edit or add to this file if you wish to upgrade PrestaShop to newer
-* versions in the future. If you wish to customize PrestaShop for your
-* needs please refer to http://www.prestashop.com for more information.
-*
-*  @author    PrestaShop SA <contact@prestashop.com>
-*  @copyright 2007-2018 PrestaShop SA
-*  @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
-*  International Registered Trademark & Property of PrestaShop SA
-*/
+ * 2007-2018 PrestaShop
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@prestashop.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade PrestaShop to newer
+ * versions in the future. If you wish to customize PrestaShop for your
+ * needs please refer to http://www.prestashop.com for more information.
+ *
+ * @author    PrestaShop SA <contact@prestashop.com>
+ * @copyright 2007-2018 PrestaShop SA
+ * @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ *  International Registered Trademark & Property of PrestaShop SA
+ */
 
 class PagoFacil16RedirectModuleFrontController extends ModuleFrontController
 {
@@ -60,31 +60,34 @@ class PagoFacil16RedirectModuleFrontController extends ModuleFrontController
          * No deberíamos haber llegado acá sin un cliente. Sólo por precaución.
          */
         $customer = new Customer($cart->id_customer);
-               
+
         if (!Validate::isLoadedObject($customer)) {
             Tools::redirect('index.php?controller=order&step=1');
         }
-        
 
 
         // Set datas
         $currency = $this->context->currency;
-        $total = (float) $cart->getOrderTotal(true, Cart::BOTH);
+        $total = (float)$cart->getOrderTotal(true, Cart::BOTH);
         $extra_vars = array();
-
 
 
         /*
          *  Validate order
          *  El estado de esta orden es el nuevo estado pendiente.
          */
-        $this->module->validateOrder($cart->id, Configuration::get('PS_OS_PAGOFACIL_PENDING_PAYMENT'), $total, $this->module->displayName, null, $extra_vars, (int) $currency->id, false, $customer->secure_key);
+        $this->module->validateOrder($cart->id, Configuration::get('PS_OS_PAGOFACIL_PENDING_PAYMENT'), $total,
+            $this->module->displayName, null, $extra_vars, (int)$currency->id, false, $customer->secure_key);
 
 
         /*
          * Obtenemos los datos a ocupar para la transacción con Pago Fácil
          */
-        $config = Configuration::getMultiple(array('PAGOFACIL16_TOKEN_SERVICE', 'PAGOFACIL16_TOKEN_SECRET','PAGOFACIL16_ES_DEVEL'));
+        $config = Configuration::getMultiple(array(
+            'PAGOFACIL16_TOKEN_SERVICE',
+            'PAGOFACIL16_TOKEN_SECRET',
+            'PAGOFACIL16_ES_DEVEL'
+        ));
         $token_service = $config['PAGOFACIL16_TOKEN_SERVICE'];
         $token_secret = $config['PAGOFACIL16_TOKEN_SECRET'];
         $esDevel = $config['PAGOFACIL16_ES_DEVEL'];
@@ -96,7 +99,7 @@ class PagoFacil16RedirectModuleFrontController extends ModuleFrontController
         /*
          * Order existe desde después del validateOrder
          */
-        $order = Order::getOrderByCartId((int) ($cart->id));
+        $order = Order::getOrderByCartId((int)($cart->id));
 
         /*
          * Datos para la transacción.
@@ -104,19 +107,20 @@ class PagoFacil16RedirectModuleFrontController extends ModuleFrontController
          */
 
         $callbackUrl = $this->context->link->getModuleLink('pagofacil16', 'callback');
-        $returnUrl = $this->context->link->getModuleLink('pagofacil16', 'confirmation')."&secure_key=$secure_key&cart_id=$cart_id";
+        $returnUrl = $this->context->link->getModuleLink('pagofacil16',
+                'confirmation') . "&secure_key=$secure_key&cart_id=$cart_id";
         $cancelUrl = __PS_BASE_URI__;
 
-        $pago_args = array (
-          "ct_order_id" => $order,
-          "ct_token_tienda" => md5($order.$token_secret),
-          "ct_monto" => round($total),
-          "ct_token_service" => $token_service,
-          "ct_email" => $customer->email,
-          "ct_currency" =>  $currency->iso_code,
-          "ct_url_callback" => $callbackUrl,
-          "ct_url_complete" => $returnUrl,
-          "ct_url_cancel" => $cancelUrl
+        $pago_args = array(
+            "ct_order_id" => $order,
+            "ct_token_tienda" => md5($order . $token_secret),
+            "ct_monto" => round($total),
+            "ct_token_service" => $token_service,
+            "ct_email" => $customer->email,
+            "ct_currency" => $currency->iso_code,
+            "ct_url_callback" => $callbackUrl,
+            "ct_url_complete" => $returnUrl,
+            "ct_url_cancel" => $cancelUrl
         );
 
         $pago_args["ct_signature"] = $this->firmarArreglo($pago_args, $token_secret);
@@ -124,15 +128,12 @@ class PagoFacil16RedirectModuleFrontController extends ModuleFrontController
         error_log(print_r($pago_args));
 
         $curl = new Curl\Curl();
-        if($esDevel)
-        {
+
+        if ($esDevel) {
             $curl->post(PF_SERVER_DESARROLLO, $pago_args);
-        }
-        else
-        {
+        } else {
             $curl->post(PF_SERVER_PRODUCCION, $pago_args);
         }
-
 
         if ($curl->error) {
             die($curl->error_code);
@@ -142,7 +143,6 @@ class PagoFacil16RedirectModuleFrontController extends ModuleFrontController
         }
 
         Tools::redirect($result["redirect"]);
-
     }
 
     public function firmarArreglo($arreglo, $secret)
@@ -177,5 +177,4 @@ class PagoFacil16RedirectModuleFrontController extends ModuleFrontController
 
         return $resultado;
     }
-    //
 }
