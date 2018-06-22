@@ -76,8 +76,17 @@ class PagoFacil16RedirectModuleFrontController extends ModuleFrontController
          *  Validate order
          *  El estado de esta orden es el nuevo estado pendiente.
          */
-        $this->module->validateOrder($cart->id, Configuration::get('PS_OS_PAGOFACIL_PENDING_PAYMENT'), $total,
-            $this->module->displayName, null, $extra_vars, (int)$currency->id, false, $customer->secure_key);
+        $this->module->validateOrder(
+            $cart->id,
+            Configuration::get('PS_OS_PAGOFACIL_PENDING_PAYMENT'),
+            $total,
+            $this->module->displayName,
+            null,
+            $extra_vars,
+            (int)$currency->id,
+            false,
+            $customer->secure_key
+        );
 
 
         /*
@@ -107,8 +116,11 @@ class PagoFacil16RedirectModuleFrontController extends ModuleFrontController
          */
 
         $callbackUrl = $this->context->link->getModuleLink('pagofacil16', 'callback');
-        $returnUrl = $this->context->link->getModuleLink('pagofacil16',
-                'confirmation') . "&secure_key=$secure_key&cart_id=$cart_id";
+        $returnUrl = $this->context->link->getModuleLink(
+            'pagofacil16',
+            'confirmation'
+        );
+        $returnUrl.= "&secure_key=$secure_key&cart_id=$cart_id";
         $cancelUrl = __PS_BASE_URI__;
 
         $pago_args = array(

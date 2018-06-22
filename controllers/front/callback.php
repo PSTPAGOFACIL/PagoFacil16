@@ -106,7 +106,7 @@ class PagoFacil16CallbackModuleFrontController extends ModuleFrontController
                     $this->HTTPHelper->my_http_response_code(400);
                 }
                 //Completamos el pedido
-                self::PaymentCompleted($order);
+                self::paymentCompleted($order);
 //                $this->payment_completed($order);
                 $this->HTTPHelper->my_http_response_code(200);
             } else {
@@ -121,7 +121,7 @@ class PagoFacil16CallbackModuleFrontController extends ModuleFrontController
     }
 
 
-    public static function PaymentCompleted($order)
+    public static function paymentCompleted($order)
     {
         $PS_OS_PAYMENT = Configuration::get('PS_OS_PAYMENT');
         if ($PS_OS_PAYMENT != $order->getCurrentState()) {
