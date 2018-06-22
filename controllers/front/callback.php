@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Copyright 2017 Cristian Tala <yomismo@cristiantala.cl>.
  *
@@ -14,9 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- */
-
-/**
+ *
  * Description of callback
  *
  * @author Cristian Tala <yomismo@cristiantala.cl>
@@ -32,16 +29,13 @@ class PagoFacil16CallbackModuleFrontController extends ModuleFrontController
     public function initContent()
     {
         $json_params = Tools::file_get_contents("php://input");
-        $json = json_decode($json_params,true);
-        
-//        error_log(print_r($json,true));
+        $json = json_decode($json_params, true);
 
 
         $this->HTTPHelper = new \ctala\HTTPHelper\HTTPHelper();
         $config = Configuration::getMultiple(array('PAGOFACIL16_TOKEN_SERVICE', 'PAGOFACIL16_TOKEN_SECRET'));
         $this->token_service = $config['PAGOFACIL16_TOKEN_SERVICE'];
         $this->token_secret = $config['PAGOFACIL16_TOKEN_SECRET'];
-
 
 
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -58,9 +52,9 @@ class PagoFacil16CallbackModuleFrontController extends ModuleFrontController
     {
         $order_id = $json["pf_order_id"];
         // error_log("Order ID $order_id");
-        $cart = new Cart((int) $order_id);
+        $cart = new Cart((int)$order_id);
         if ($cart->id_customer == 0 || $cart->id_address_delivery == 0 ||
-                $cart->id_address_invoice == 0 || !$this->module->active) {
+            $cart->id_address_invoice == 0 || !$this->module->active) {
             $this->HTTPHelper->my_http_response_code(404);
         }
 
@@ -80,7 +74,7 @@ class PagoFacil16CallbackModuleFrontController extends ModuleFrontController
         }
 
         //Obtengo y firmo el arreglo
- 
+
         $pfs = array();
         //Se obtienen solo los datos que inician en pf_
         foreach ($json as $key => $value) {
@@ -88,17 +82,16 @@ class PagoFacil16CallbackModuleFrontController extends ModuleFrontController
                 $pfs[$key] = $value;
             }
         }
-        
-                /*
-         * El payload recibido debe de ser verificado contra el mismo firmado.
-         */
+
+        /*
+ * El payload recibido debe de ser verificado contra el mismo firmado.
+ */
         $pf_signature = $pfs["pf_signature"];
         unset($pfs["pf_signature"]);
         ksort($pfs);
-        
+
         $mensaje = $this->concatPayload($pfs);
-        $mensajeFirmado = hash_hmac('sha256', $mensaje, $this->token_secret); 
-        
+        $mensajeFirmado = hash_hmac('sha256', $mensaje, $this->token_secret);
 
 
         if ($pf_signature == $mensajeFirmado) {
@@ -127,7 +120,6 @@ class PagoFacil16CallbackModuleFrontController extends ModuleFrontController
     }
 
 
-
     public static function payment_completed($order)
     {
         $PS_OS_PAYMENT = Configuration::get('PS_OS_PAYMENT');
@@ -136,13 +128,14 @@ class PagoFacil16CallbackModuleFrontController extends ModuleFrontController
             $order->save();
         }
     }
-    
-    
-        public function concatPayload($fields) {
+
+
+    public function concatPayload($fields)
+    {
         $resultado = "";
 
         foreach ($fields as $field => $value) {
-            $resultado.=$field . $value;
+            $resultado .= $field . $value;
         }
 
         return $resultado;
