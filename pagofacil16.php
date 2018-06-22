@@ -1,28 +1,28 @@
 <?php
 /**
-* 2007-2018 PrestaShop
-*
-* NOTICE OF LICENSE
-*
-* This source file is subject to the Academic Free License (AFL 3.0)
-* that is bundled with this package in the file LICENSE.txt.
-* It is also available through the world-wide-web at this URL:
-* http://opensource.org/licenses/afl-3.0.php
-* If you did not receive a copy of the license and are unable to
-* obtain it through the world-wide-web, please send an email
-* to license@prestashop.com so we can send you a copy immediately.
-*
-* DISCLAIMER
-*
-* Do not edit or add to this file if you wish to upgrade PrestaShop to newer
-* versions in the future. If you wish to customize PrestaShop for your
-* needs please refer to http://www.prestashop.com for more information.
-*
-*  @author    PrestaShop SA <contact@prestashop.com>
-*  @copyright 2007-2018 PrestaShop SA
-*  @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
-*  International Registered Trademark & Property of PrestaShop SA
-*/
+ * 2007-2018 PrestaShop
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@prestashop.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade PrestaShop to newer
+ * versions in the future. If you wish to customize PrestaShop for your
+ * needs please refer to http://www.prestashop.com for more information.
+ *
+ * @author    PrestaShop SA <contact@prestashop.com>
+ * @copyright 2007-2018 PrestaShop SA
+ * @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ *  International Registered Trademark & Property of PrestaShop SA
+ */
 
 if (!defined('_PS_VERSION_')) {
     exit;
@@ -33,9 +33,7 @@ include_once 'vendor/autoload.php';
 define("PF_SERVER_DESARROLLO", "https://t.pagofacil.xyz/v1");
 define("PF_SERVER_PRODUCCION", "https://t.pgf.cl/v1");
 
-
-
-class pagofacil16 extends PaymentModule
+class PagoFacil16 extends PaymentModule
 {
     protected $config_form = false;
 
@@ -58,7 +56,7 @@ class pagofacil16 extends PaymentModule
         $this->bootstrap = true;
 
 
-        $config = Configuration::getMultiple(array('PAGOFACIL16_TOKEN_SERVICE', 'PAGOFACIL16_TOKEN_SECRET','PAGOFACIL16_ES_DEVEL'));
+        $config = Configuration::getMultiple(array('PAGOFACIL16_TOKEN_SERVICE', 'PAGOFACIL16_TOKEN_SECRET', 'PAGOFACIL16_ES_DEVEL'));
         if (!empty($config['PAGOFACIL16_TOKEN_SERVICE'])) {
             $this->token_service = $config['PAGOFACIL16_TOKEN_SERVICE'];
         }
@@ -109,9 +107,10 @@ class pagofacil16 extends PaymentModule
         /*
                * Generamos el nuevo estado de orden
                */
-              if (!$this->installOrderState()) {
-                  return false;
-              }
+        if (!$this->installOrderState())
+        {
+            return false;
+        }
 
         return parent::install() &&
             $this->registerHook('header') &&
@@ -123,8 +122,8 @@ class pagofacil16 extends PaymentModule
 
     public function uninstall()
     {
-         Configuration::deleteByName('PAGOFACIL16_ES_DEVEL');
-         Configuration::deleteByName('PAGOFACIL16_TOKEN_SECRET');
+        Configuration::deleteByName('PAGOFACIL16_ES_DEVEL');
+        Configuration::deleteByName('PAGOFACIL16_TOKEN_SECRET');
 
         return parent::uninstall();
     }
@@ -143,9 +142,9 @@ class pagofacil16 extends PaymentModule
 
         $this->context->smarty->assign('module_dir', $this->_path);
 
-        $output = $this->context->smarty->fetch($this->local_path.'views/templates/admin/configure.tpl');
+        $output = $this->context->smarty->fetch($this->local_path . 'views/templates/admin/configure.tpl');
 
-        return $output.$this->renderForm();
+        return $output . $this->renderForm();
     }
 
     /**
@@ -164,7 +163,7 @@ class pagofacil16 extends PaymentModule
         $helper->identifier = $this->identifier;
         $helper->submit_action = 'submitPagoFacil16Module';
         $helper->currentIndex = $this->context->link->getAdminLink('AdminModules', false)
-            .'&configure='.$this->name.'&tab_module='.$this->tab.'&module_name='.$this->name;
+            . '&configure=' . $this->name . '&tab_module=' . $this->tab . '&module_name=' . $this->name;
         $helper->token = Tools::getAdminTokenLite('AdminModules');
 
         $helper->tpl_vars = array(
@@ -184,8 +183,8 @@ class pagofacil16 extends PaymentModule
         return array(
             'form' => array(
                 'legend' => array(
-                'title' => $this->l('Settings'),
-                'icon' => 'icon-cogs',
+                    'title' => $this->l('Settings'),
+                    'icon' => 'icon-cogs',
                 ),
                 'input' => array(
                     array(
@@ -256,13 +255,13 @@ class pagofacil16 extends PaymentModule
     }
 
     /**
-    * Add the CSS & JavaScript files you want to be loaded in the BO.
-    */
+     * Add the CSS & JavaScript files you want to be loaded in the BO.
+     */
     public function hookBackOfficeHeader()
     {
         if (Tools::getValue('module_name') == $this->name) {
-            $this->context->controller->addJS($this->_path.'views/js/back.js');
-            $this->context->controller->addCSS($this->_path.'views/css/back.css');
+            $this->context->controller->addJS($this->_path . 'views/js/back.js');
+            $this->context->controller->addCSS($this->_path . 'views/css/back.css');
         }
     }
 
@@ -271,8 +270,8 @@ class pagofacil16 extends PaymentModule
      */
     public function hookHeader()
     {
-        $this->context->controller->addJS($this->_path.'/views/js/front.js');
-        $this->context->controller->addCSS($this->_path.'/views/css/front.css');
+        $this->context->controller->addJS($this->_path . '/views/js/front.js');
+        $this->context->controller->addCSS($this->_path . '/views/css/front.css');
     }
 
     /**
@@ -319,7 +318,8 @@ class pagofacil16 extends PaymentModule
         return $this->display(__FILE__, 'views/templates/hook/confirmation.tpl');
     }
 
-    public function installOrderState() {
+    public function installOrderState()
+    {
         if (Configuration::get('PS_OS_PAGOFACIL_PENDING_PAYMENT') < 1) {
             $order_state = new OrderState();
             $order_state->send_email = false;
@@ -333,7 +333,7 @@ class pagofacil16 extends PaymentModule
             $order_state->hidden = false;
             $order_state->paid = false;
             $order_state->deleted = false;
-            $order_state->name = array((int) Configuration::get('PS_LANG_DEFAULT') => pSQL($this->l('Pago Fácil - Pendiente de Pago')));
+            $order_state->name = array((int)Configuration::get('PS_LANG_DEFAULT') => pSQL($this->l('Pago Fácil - Pendiente de Pago')));
             if ($order_state->add()) {
                 // We save the order State ID in Configuration database
                 Configuration::updateValue('PS_OS_PAGOFACIL_PENDING_PAYMENT', $order_state->id);
@@ -343,13 +343,5 @@ class pagofacil16 extends PaymentModule
         }
         return true;
     }
-    // public function hookDisplayPayment()
-    // {
-    //     /* Place your code here. */
-    // }
-    //
-    // public function hookDisplayPaymentReturn()
-    // {
-    //     /* Place your code here. */
-    // }
+
 }

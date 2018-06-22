@@ -17,8 +17,8 @@
  * Description of callback
  *
  * @author Cristian Tala <yomismo@cristiantala.cl>
+ * @copyright 2007-2018 Pago Fácil SpA
  */
-
 
 class PagoFacil16CallbackModuleFrontController extends ModuleFrontController
 {
