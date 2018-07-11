@@ -6,6 +6,5 @@ $vendorDir = dirname(dirname(__FILE__));
 $baseDir = dirname($vendorDir);
 
 return array(
-    'ctala\\transaccion\\' => array($vendorDir . '/ctala/transaccion-default'),
-    'ctala\\HTTPHelper\\' => array($vendorDir . '/ctala/http-helper/src'),
+    'PagoFacil\\lib\\' => array($vendorDir . '/pagofacil/php-sdk/classes'),
 );

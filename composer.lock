@@ -1,143 +1,45 @@
 {
     "_readme": [
         "This file locks the dependencies of your project to a known state",
-        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
+        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "3494e04c8d5718249e40f9128ceb0259",
+    "content-hash": "e229eab804fb28f6caddeb71210febfc",
     "packages": [
         {
-            "name": "ctala/http-helper",
-            "version": "dev-master",
+            "name": "pagofacil/php-sdk",
+            "version": "v0.1",
             "source": {
                 "type": "git",
-                "url": "https://github.com/ctala/HTTPHelper.git",
-                "reference": "e5e211c7576ee7a08bbe43ba413a60b06bdac88c"
+                "url": "https://github.com/PSTPAGOFACIL/SDK-PHP.git",
+                "reference": "af1fab9b061b37db0382c91ba589b904c2e23ec7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/ctala/HTTPHelper/zipball/e5e211c7576ee7a08bbe43ba413a60b06bdac88c",
-                "reference": "e5e211c7576ee7a08bbe43ba413a60b06bdac88c",
+                "url": "https://api.github.com/repos/PSTPAGOFACIL/SDK-PHP/zipball/af1fab9b061b37db0382c91ba589b904c2e23ec7",
+                "reference": "af1fab9b061b37db0382c91ba589b904c2e23ec7",
                 "shasum": ""
             },
             "type": "library",
             "autoload": {
                 "psr-4": {
-                    "ctala\\HTTPHelper\\": "src/"
+                    "PagoFacil\\lib\\": "classes"
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
             "authors": [
                 {
-                    "name": "Cristian Tala Sanchez",
-                    "email": "yomismo@cristiantala.cl"
+                    "name": "Stephanie Piñero",
+                    "email": "stephanie@pagofacil.cl"
                 }
             ],
-            "description": "Helper para respuestas HTTP",
-            "time": "2017-03-22T11:58:16+00:00"
-        },
-        {
-            "name": "ctala/transaccion-default",
-            "version": "V0.1.12.3",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/NAITUSEIRL/PagoFacil.org-PHP-SDK.git",
-                "reference": "d7031130ddd4960c36cfa09d4874888a09686c5e"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/NAITUSEIRL/PagoFacil.org-PHP-SDK/zipball/d7031130ddd4960c36cfa09d4874888a09686c5e",
-                "reference": "d7031130ddd4960c36cfa09d4874888a09686c5e",
-                "shasum": ""
-            },
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "ctala\\transaccion\\": ""
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Cristian Tala Sanchez",
-                    "email": "yomismo@cristiantala.cl"
-                }
-            ],
-            "description": "Libreria base para generar transacciones con TBKAAS",
-            "keywords": [
-                " libreria",
-                "extension"
-            ],
-            "time": "2016-12-07T12:57:39+00:00"
-        },
-        {
-            "name": "curl/curl",
-            "version": "1.9.1",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/php-mod/curl.git",
-                "reference": "958363d1fed599aa24efb2221e2c1e6c61711464"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/php-mod/curl/zipball/958363d1fed599aa24efb2221e2c1e6c61711464",
-                "reference": "958363d1fed599aa24efb2221e2c1e6c61711464",
-                "shasum": ""
-            },
-            "require": {
-                "ext-curl": "*",
-                "php": ">=5.3.0"
-            },
-            "require-dev": {
-                "phpunit/phpunit": "3.7.*",
-                "squizlabs/php_codesniffer": "~2.1"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-0": {
-                    "Curl": "src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Hassan Amouhzi",
-                    "email": "hassan@anezi.net",
-                    "homepage": "http://hassan.amouhzi.com"
-                },
-                {
-                    "name": "php-curl-class",
-                    "homepage": "https://github.com/php-curl-class"
-                },
-                {
-                    "name": "user52",
-                    "homepage": "https://github.com/user52"
-                }
-            ],
-            "description": "cURL class for PHP",
-            "homepage": "https://github.com/php-mod/curl",
-            "keywords": [
-                "curl",
-                "dot"
-            ],
-            "time": "2018-05-23T20:32:06+00:00"
+            "time": "2018-07-10T20:49:15+00:00"
         }
     ],
     "packages-dev": [],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": {
-        "ctala/http-helper": 20
-    },
+    "stability-flags": [],
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": [],

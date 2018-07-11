@@ -4,43 +4,27 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit2e195fa49141a05018b6026bdae7157b
+class ComposerStaticInit0f744f43844a431560b4b4888d3965df
 {
     public static $prefixLengthsPsr4 = array (
-        'c' => 
+        'P' => 
         array (
-            'ctala\\transaccion\\' => 18,
-            'ctala\\HTTPHelper\\' => 17,
+            'PagoFacil\\lib\\' => 14,
         ),
     );
 
     public static $prefixDirsPsr4 = array (
-        'ctala\\transaccion\\' => 
+        'PagoFacil\\lib\\' => 
         array (
-            0 => __DIR__ . '/..' . '/ctala/transaccion-default',
-        ),
-        'ctala\\HTTPHelper\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/ctala/http-helper/src',
-        ),
-    );
-
-    public static $prefixesPsr0 = array (
-        'C' => 
-        array (
-            'Curl' => 
-            array (
-                0 => __DIR__ . '/..' . '/curl/curl/src',
-            ),
+            0 => __DIR__ . '/..' . '/pagofacil/php-sdk/classes',
         ),
     );
 
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit2e195fa49141a05018b6026bdae7157b::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit2e195fa49141a05018b6026bdae7157b::$prefixDirsPsr4;
-            $loader->prefixesPsr0 = ComposerStaticInit2e195fa49141a05018b6026bdae7157b::$prefixesPsr0;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit0f744f43844a431560b4b4888d3965df::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit0f744f43844a431560b4b4888d3965df::$prefixDirsPsr4;
 
         }, null, ClassLoader::class);
     }

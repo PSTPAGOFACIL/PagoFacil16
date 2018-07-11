@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright 2017 Cristian Tala <yomismo@cristiantala.cl>.
+ * Copyright 2018 Stephanie Piñero <stephanie@pagofacil.cl>.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,110 +16,102 @@
  *
  * Description of callback
  *
- * @author Cristian Tala <yomismo@cristiantala.cl>
+ * @author Stephanie Piñero <stephanie@pagofacil.cl>
  * @copyright 2007-2018 Pago Fácil SpA
  * @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 
-class PagoFacil16CallbackModuleFrontController extends ModuleFrontController
+use PagoFacil\lib\Transaction;
+
+class PagoFacilCallbackModuleFrontController extends ModuleFrontController
 {
-    public $HTTPHelper;
     public $token_secret;
     public $token_service;
 
     public function initContent()
     {
-        $json_params = Tools::file_get_contents("php://input");
-        $json = json_decode($json_params, true);
+        $response = Tools::file_get_contents("php://input");
 
-
-        $this->HTTPHelper = new \ctala\HTTPHelper\HTTPHelper();
         $config = Configuration::getMultiple(array('PAGOFACIL16_TOKEN_SERVICE', 'PAGOFACIL16_TOKEN_SECRET'));
         $this->token_service = $config['PAGOFACIL16_TOKEN_SERVICE'];
         $this->token_secret = $config['PAGOFACIL16_TOKEN_SECRET'];
 
-
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-//            error_log("ES POST");
-            $this->procesarCallback($json);
-            $this->HTTPHelper->my_http_response_code(200);
+            $this->procesarCallback($response);
+            $protocol = (isset($_SERVER['SERVER_PROTOCOL']) ? $_SERVER['SERVER_PROTOCOL'] : 'HTTP/1.0');
+            $header = $protocol  . ' 200 OK';
+            header($header);
         } else {
             error_log("NO SE INGRESA POR POST (405)");
-            $this->HTTPHelper->my_http_response_code(405);
         }
     }
 
-    protected function procesarCallback($json)
+    protected function procesarCallback($response)
     {
-        $order_id = $json["pf_order_id"];
-        // error_log("Order ID $order_id");
+        $config = Configuration::getMultiple(array('PAGOFACIL16_TOKEN_SERVICE', 'PAGOFACIL16_TOKEN_SECRET'));
+        $this->token_service = $config['PAGOFACIL16_TOKEN_SERVICE'];
+        $this->token_secret = $config['PAGOFACIL16_TOKEN_SECRET'];
+
+        $order_id = $response["x_reference"];
         $cart = new Cart((int)$order_id);
         if ($cart->id_customer == 0 || $cart->id_address_delivery == 0 ||
-            $cart->id_address_invoice == 0 || !$this->module->active) {
-            $this->HTTPHelper->my_http_response_code(404);
+          $cart->id_address_invoice == 0 || !$this->module->active) {
+            $protocol = (isset($_SERVER['SERVER_PROTOCOL']) ? $_SERVER['SERVER_PROTOCOL'] : 'HTTP/1.0');
+            $header = $protocol  . ' 404 No encontrado';
+            header($header);
         }
 
         // Check if customer exists
         $customer = new Customer($cart->id_customer);
         if (!Validate::isLoadedObject($customer)) {
-            $this->HTTPHelper->my_http_response_code(412);
+            $protocol = (isset($_SERVER['SERVER_PROTOCOL']) ? $_SERVER['SERVER_PROTOCOL'] : 'HTTP/1.0');
+            $header = $protocol  . ' 412 Precondition Failed';
+            header($header);
         }
 
-        //Obtenemos la orden
+        //Get the order
         $order = new Order($order_id);
 
-        //Si la orden está completada no hago nada.
+        //If order complete do nothing
         $PS_OS_PAYMENT = Configuration::get('PS_OS_PAYMENT');
         if ($PS_OS_PAYMENT == $order->getCurrentState()) {
-            $this->HTTPHelper->my_http_response_code(400);
+            $protocol = (isset($_SERVER['SERVER_PROTOCOL']) ? $_SERVER['SERVER_PROTOCOL'] : 'HTTP/1.0');
+            $header = $protocol  . ' 400 Bad Request';
+            header($header);
         }
 
-        //Obtengo y firmo el arreglo
-
-        $pfs = array();
-        //Se obtienen solo los datos que inician en pf_
-        foreach ($json as $key => $value) {
-            if (!substr_compare("pf_", $key, 0, 3)) {
-                $pfs[$key] = $value;
-            }
-        }
-
-        /*
- * El payload recibido debe de ser verificado contra el mismo firmado.
- */
-        $pf_signature = $pfs["pf_signature"];
-        unset($pfs["pf_signature"]);
-        ksort($pfs);
-
-        $mensaje = $this->concatPayload($pfs);
-        $mensajeFirmado = hash_hmac('sha256', $mensaje, $this->token_secret);
-
-
-        if ($pf_signature == $mensajeFirmado) {
+        $transaction = new Transaction();
+        $transaction->setToken($this->token_secret);
+        //Validate Signed message
+        if ($transaction->validate($response)) {
             error_log("FIRMAS CORRESPONDEN");
-            $ct_estado = $pfs["pf_status"];
-            //Verifico el estado de la orden.
-            if ($ct_estado == "completed") {
-                //El pedido fue completado exitosamente.
-                //Corroboramos los montos.
-                if (round($order->total_paid) != $pfs["pf_amount"]) {
-                    $this->HTTPHelper->my_http_response_code(400);
+            //Validate order state
+            if ($response['x_result'] == "completed") {
+                //Validate amount of order
+                if (round($order->total_paid) != $response["x_amount"]) {
+                    $protocol = (isset($_SERVER['SERVER_PROTOCOL']) ? $_SERVER['SERVER_PROTOCOL'] : 'HTTP/1.0');
+                    $header = $protocol  . ' 400 Bad Request';
+                    header($header);
                 }
-                //Completamos el pedido
                 self::paymentCompleted($order);
-//                $this->payment_completed($order);
-                $this->HTTPHelper->my_http_response_code(200);
+                $protocol = (isset($_SERVER['SERVER_PROTOCOL']) ? $_SERVER['SERVER_PROTOCOL'] : 'HTTP/1.0');
+                $header = $protocol  . ' 200 OK';
+                header($header);
             } else {
-                //TODO Si el pago no está completo marco como fallida
-                $this->HTTPHelper->my_http_response_code(200);
+                $protocol = (isset($_SERVER['SERVER_PROTOCOL']) ? $_SERVER['SERVER_PROTOCOL'] : 'HTTP/1.0');
+                $header = $protocol  . ' 200 OK';
+                header($header);
             }
         } else {
             error_log("FIRMAS NO CORRESPONDEN");
-            $this->HTTPHelper->my_http_response_code(400);
+            $protocol = (isset($_SERVER['SERVER_PROTOCOL']) ? $_SERVER['SERVER_PROTOCOL'] : 'HTTP/1.0');
+            $header = $protocol  . ' 400 Bad Request';
+            header($header);
         }
-        $this->HTTPHelper->my_http_response_code(200);
+        $protocol = (isset($_SERVER['SERVER_PROTOCOL']) ? $_SERVER['SERVER_PROTOCOL'] : 'HTTP/1.0');
+        $header = $protocol  . ' 200 OK';
+        header($header);
     }
-
 
     public static function paymentCompleted($order)
     {
@@ -128,17 +120,5 @@ class PagoFacil16CallbackModuleFrontController extends ModuleFrontController
             $order->setCurrentState($PS_OS_PAYMENT);
             $order->save();
         }
-    }
-
-
-    public function concatPayload($fields)
-    {
-        $resultado = "";
-
-        foreach ($fields as $field => $value) {
-            $resultado .= $field . $value;
-        }
-
-        return $resultado;
     }
 }

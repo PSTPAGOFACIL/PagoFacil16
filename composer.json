@@ -1,7 +1,8 @@
 {
     "require": {
-        "curl/curl": "^1.9",
-        "ctala/transaccion-default": "V0.1.12.3",
-        "ctala/http-helper": "dev-master"
+        "pagofacil/php-sdk": "^0.1.0"
+    },
+"require-dev": {
+        "squizlabs/php_codesniffer": "3.*"
     }
 }

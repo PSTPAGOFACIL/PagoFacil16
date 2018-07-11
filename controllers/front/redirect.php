@@ -24,20 +24,25 @@
  *  International Registered Trademark & Property of PrestaShop SA
  */
 
-class PagoFacil16RedirectModuleFrontController extends ModuleFrontController
+use PagoFacil\lib\Request;
+use PagoFacil\lib\Transaction;
+
+class PagoFacilRedirectModuleFrontController extends ModuleFrontController
 {
     public $ssl = true;
 
     public function initContent()
     {
+
         // Disable left and right column
         $this->display_column_left = false;
         $this->display_column_right = false;
         parent::initContent();
 
-        //Verificamos que la orden exista y que esté llenada de manera adecuada.
+        //Verify the order
         $cart = $this->context->cart;
-        if ($cart->id_customer == 0 || $cart->id_address_delivery == 0 || $cart->id_address_invoice == 0 || !$this->module->active) {
+        $c = $cart;
+        if ($c->id_customer==0 || $c->id_address_delivery==0 || $c->id_address_invoic==0 || !$this->module->active) {
             Tools::redirect('index.php?controller=order&step=1');
         }
 
@@ -50,31 +55,27 @@ class PagoFacil16RedirectModuleFrontController extends ModuleFrontController
         }
 
         /*
-         * Si el módulo no permite el pago con el currency actual detenemos el proceso.
+         * If not allowed then stop the proccess
          */
         if (!$authorized) {
             die($this->module->l('This payment method is not available.', 'validation'));
         }
 
         /*
-         * No deberíamos haber llegado acá sin un cliente. Sólo por precaución.
+         * Verify user
          */
         $customer = new Customer($cart->id_customer);
 
         if (!Validate::isLoadedObject($customer)) {
             Tools::redirect('index.php?controller=order&step=1');
         }
-
-
         // Set datas
         $currency = $this->context->currency;
         $total = (float)$cart->getOrderTotal(true, Cart::BOTH);
         $extra_vars = array();
-
-
         /*
          *  Validate order
-         *  El estado de esta orden es el nuevo estado pendiente.
+         *  Set new order state
          */
         $this->module->validateOrder(
             $cart->id,
@@ -88,10 +89,6 @@ class PagoFacil16RedirectModuleFrontController extends ModuleFrontController
             $customer->secure_key
         );
 
-
-        /*
-         * Obtenemos los datos a ocupar para la transacción con Pago Fácil
-         */
         $config = Configuration::getMultiple(array(
             'PAGOFACIL16_TOKEN_SERVICE',
             'PAGOFACIL16_TOKEN_SECRET',
@@ -99,94 +96,36 @@ class PagoFacil16RedirectModuleFrontController extends ModuleFrontController
         ));
         $token_service = $config['PAGOFACIL16_TOKEN_SERVICE'];
         $token_secret = $config['PAGOFACIL16_TOKEN_SECRET'];
-        $esDevel = $config['PAGOFACIL16_ES_DEVEL'];
         $secure_key = $customer->secure_key;
         $cart_id = $cart->id;
 
         $total = $cart->getOrderTotal(true, Cart::BOTH);
 
         /*
-         * Order existe desde después del validateOrder
+         * Order exists since validateOrder function
          */
         $order = Order::getOrderByCartId((int)($cart->id));
 
         /*
-         * Datos para la transacción.
-         * TODO : Generar token random.
+         * Transaction data
          */
-
-        $callbackUrl = $this->context->link->getModuleLink('pagofacil16', 'callback');
-        $returnUrl = $this->context->link->getModuleLink(
-            'pagofacil16',
+        $request = new Request();
+        $request->account_id = $token_service;
+        $request->amount = round($total);
+        $request->currency = $currency->iso_code;
+        $request->reference = $order;
+        $request->customer_email =  $customer->email;
+        $request->url_complete = $this->context->link->getModuleLink(
+            'pagofacil',
             'confirmation'
-        );
-        $returnUrl.= "&secure_key=$secure_key&cart_id=$cart_id";
-        $cancelUrl = __PS_BASE_URI__;
-
-        $pago_args = array(
-            "ct_order_id" => $order,
-            "ct_token_tienda" => md5($order . $token_secret),
-            "ct_monto" => round($total),
-            "ct_token_service" => $token_service,
-            "ct_email" => $customer->email,
-            "ct_currency" => $currency->iso_code,
-            "ct_url_callback" => $callbackUrl,
-            "ct_url_complete" => $returnUrl,
-            "ct_url_cancel" => $cancelUrl
-        );
-
-        $pago_args["ct_signature"] = $this->firmarArreglo($pago_args, $token_secret);
-
-        error_log(print_r($pago_args));
-
-        $curl = new Curl\Curl();
-
-        if ($esDevel) {
-            $curl->post(PF_SERVER_DESARROLLO, $pago_args);
-        } else {
-            $curl->post(PF_SERVER_PRODUCCION, $pago_args);
-        }
-
-        if ($curl->error) {
-            die($curl->error_code);
-        } else {
-            // echo $curl->response;
-            $result = json_decode($curl->response, true);
-        }
-
-        Tools::redirect($result["redirect"]);
-    }
-
-    public function firmarArreglo($arreglo, $secret)
-    {
-
-        //Ordeno Arreglo
-        ksort($arreglo);
-        //Concateno Arreglo
-        $mensaje = $this->concatenarArreglo($arreglo);
-
-        //Firmo Mensaje
-        $mensajeFirmado = $this->firmarMensaje($mensaje, $secret);
-
-        //Guardo y retorno el mensaje firmado
-        $this->ct_firma = $mensajeFirmado;
-        return $mensajeFirmado;
-    }
-
-    public function firmarMensaje($mensaje, $claveCifrado)
-    {
-        $mensajeFirmado = hash_hmac('sha256', $mensaje, $claveCifrado);
-        return $mensajeFirmado;
-    }
-
-    public function concatenarArreglo($arreglo)
-    {
-        $resultado = "";
-
-        foreach ($arreglo as $field => $value) {
-            $resultado .= $field . $value;
-        }
-
-        return $resultado;
+        )."&secure_key=$secure_key&cart_id=$cart_id";
+        $request->url_cancel = __PS_BASE_URI__;
+        $request->url_callback =  $this->context->link->getModuleLink('pagofacil', 'callback');
+        $request->shop_country =  Context::getContext()->language->iso_code;
+        $request->session_id = date('Ymdhis').rand(0, 9).rand(0, 9).rand(0, 9);
+        $transaction = new Transaction($request);
+        $transaction->environment = 'DESARROLLO';
+        $transaction->setToken($token_secret);
+        $transaction->initTransaction($request);
     }
 }

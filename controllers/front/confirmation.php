@@ -24,7 +24,7 @@
 *  International Registered Trademark & Property of PrestaShop SA
 */
 
-class PagoFacil16ConfirmationModuleFrontController extends ModuleFrontController
+class PagoFacilConfirmationModuleFrontController extends ModuleFrontController
 {
     public function postProcess()
     {
@@ -38,8 +38,6 @@ class PagoFacil16ConfirmationModuleFrontController extends ModuleFrontController
         $cart = new Cart((int)$cart_id);
         $customer = new Customer((int)$cart->id_customer);
 
-   
-       
         $order_id = Order::getOrderByCartId((int)$cart->id);
 
         if ($order_id && ($secure_key == $customer->secure_key)) {
@@ -48,12 +46,14 @@ class PagoFacil16ConfirmationModuleFrontController extends ModuleFrontController
              */
 
             $module_id = $this->module->id;
-            Tools::redirect('index.php?controller=order-confirmation&id_cart='.$cart_id.'&id_module='.$module_id.'&id_order='.$order_id.'&key='.$secure_key);
+            $url = 'index.php?controller=order-confirmation&id_cart=';
+            $url .= $cart_id.'&id_module='.$module_id.'&id_order='.$order_id.'&key='.$secure_key;
+            Tools::redirect($url);
         } else {
             /**
              * An error occured and is shown on a new page.
              */
-            $this->errors[] = $this->module->l('An error occured. Please contact the merchant to have more informations');
+            $this->errors[] = $this->module->l('An error occured.Contact the merchant to have more informations');
             return $this->setTemplate('error.tpl');
         }
     }
