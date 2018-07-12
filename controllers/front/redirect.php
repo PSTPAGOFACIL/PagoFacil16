@@ -96,6 +96,7 @@ class PagoFacilRedirectModuleFrontController extends ModuleFrontController
         ));
         $token_service = $config['PAGOFACIL16_TOKEN_SERVICE'];
         $token_secret = $config['PAGOFACIL16_TOKEN_SECRET'];
+        $esDevel = $config['PAGOFACIL16_ES_DEVEL'];
         $secure_key = $customer->secure_key;
         $cart_id = $cart->id;
 
@@ -124,7 +125,11 @@ class PagoFacilRedirectModuleFrontController extends ModuleFrontController
         $request->shop_country =  Context::getContext()->language->iso_code;
         $request->session_id = date('Ymdhis').rand(0, 9).rand(0, 9).rand(0, 9);
         $transaction = new Transaction($request);
-        $transaction->environment = 'DESARROLLO';
+          if ($esDevel) {
+            $transaction->environment = 'DESARROLLO';
+        } else {
+            $transaction->environment = 'PRODUCCION';
+        }
         $transaction->setToken($token_secret);
         $transaction->initTransaction($request);
     }
