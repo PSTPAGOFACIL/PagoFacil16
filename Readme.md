@@ -1,25 +1,27 @@
 # Pago Fácil SpA
 
-## Uso
-### Requisitos
+## Use
+### Requirements
 
 - Prestashop v1.6
+- Have an associated account in Pago Fácil
 
-### Instalación
+### Installation
 
-- Subir archivo .zip mediante el Backoffice de Prestashop.
-- Dejar plugin descomprimido en la carpeta "modules/pagofacil" dentro de la carpeta de instalación de Prestashop.
+- Upload file .zip Subir archivo .zip using Prestashop's Backoffice.
+- Leave the decompressed plugin in the "modules/pagofacil" folder inside the Prestashop installation folder.
 
-Una vez realizado esto se debe ir a la sección de "Módulos" y buscar Pago Fácil, luego apretar en el botón "Instalar"
 
-### Configuración
+Once this is done, go to the "Modules" section and look for Pago Fácil, then click on the "Install" button
 
-Cuando se tenga instalado el plugin se debe hacer click el el botón "Configurar" que aparece del lado derecho del plugin. Se mostrara la siguiente vista:
+### Configuration
+
+When the plugin is installed, click on the "Configure" button that appears on the right side of the plugin. The following view will be displayed:
 
 ![Screenshot](readme/config.png)
 
-- Se debe seleccionar el ambiente en el cual se desea trabajar, colocando si se desea trabajar en ambiente de desarrollo.
-- Agregar el Token de Servicio y Token Secreto que le proporciona Pago Fácil
-- Hacer click en el botón guardar
+- You must select the environment in which you want to work, placing if you want to work in a development environment.
+- Add the "Token Service" and "Token Secret" that provides Pago Fácil
+- Click on the save button
 
-Una vez realizados estos pasos se puede hacer uso del método de pago con Pago Fácil
+Once these steps are completed, you can use the payment method with Pago Fácil.
