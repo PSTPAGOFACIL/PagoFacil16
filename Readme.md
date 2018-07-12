@@ -4,7 +4,7 @@
 ### Requirements
 
 - Prestashop v1.6
-- Have an associated account in Pago Fácil
+- Have an associated account in [Pago Fácil](https://dashboard.pagofacil.cl/)
 
 ### Installation
 
