@@ -33,7 +33,7 @@ use PagoFacil\lib\Transaction;
 
 define("PF_SERVER_DESARROLLO", "https://pagofacil.ngrok.io/initTransaction");
 define("PF_SERVER_BETA", "https://gw-beta.pagofacil.cl/initTransaction");
-define("PF_SERVER_PRODUCCION", "https://gw.pagofacil.cl/initTransactio");
+define("PF_SERVER_PRODUCCION", "https://gw.pagofacil.cl/initTransaction");
 
 class PagoFacil extends PaymentModule
 {
@@ -42,7 +42,6 @@ class PagoFacil extends PaymentModule
     public $token_service;
     public $esDevel;
     public $token_secret;
-
 
     public function __construct()
     {
