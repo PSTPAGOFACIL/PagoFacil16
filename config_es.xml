@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<module>
+	<name>pagofacil</name>
+	<displayName><![CDATA[Pago F&aacute;cil SpA]]></displayName>
+	<version><![CDATA[1.0.0]]></version>
+	<description><![CDATA[Vende con distintos medios de pago en tu tienda de manera instant&aacute;nea con Pago F&aacute;cil.]]></description>
+	<author><![CDATA[Stephanie Pi&ntilde;ero]]></author>
+	<tab><![CDATA[payments_gateways]]></tab>
+	<confirmUninstall><![CDATA[Al desinstalar no podrás recibir pagos. ¿Estás seguro?]]></confirmUninstall>
+	<is_configurable>1</is_configurable>
+	<need_instance>0</need_instance>
+	<limited_countries>CL</limited_countries>
+</module>
