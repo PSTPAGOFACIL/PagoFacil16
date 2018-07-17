@@ -42,7 +42,7 @@ class PagoFacilRedirectModuleFrontController extends ModuleFrontController
         //Verify the order
         $cart = $this->context->cart;
         $c = $cart;
-        if ($c->id_customer==0 || $c->id_address_delivery==0 || $c->id_address_invoic==0 || !$this->module->active) {
+        if ($c->id_customer==0 || $c->id_address_delivery==0 || $c->id_address_invoice==0 || !$this->module->active) {
             Tools::redirect('index.php?controller=order&step=1');
         }
 
