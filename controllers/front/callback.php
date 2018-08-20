@@ -37,10 +37,12 @@ class PagoFacilCallbackModuleFrontController extends ModuleFrontController
         $this->token_secret = $config['PAGOFACIL16_TOKEN_SECRET'];
 
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $this->procesarCallback($response);
-            $protocol = (isset($_SERVER['SERVER_PROTOCOL']) ? $_SERVER['SERVER_PROTOCOL'] : 'HTTP/1.0');
-            $header = $protocol  . ' 200 OK';
-            header($header);
+
+            // $this->procesarCallback($response);
+            $this->procesarCallback($_POST);
+            // $protocol = (isset($_SERVER['SERVER_PROTOCOL']) ? $_SERVER['SERVER_PROTOCOL'] : 'HTTP/1.0');
+            // $header = $protocol  . ' 200 OK';
+            // header($header);
         } else {
             error_log("NO SE INGRESA POR POST (405)");
         }
