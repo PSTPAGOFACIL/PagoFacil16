@@ -73,17 +73,17 @@ class PagoFacil extends PaymentModule
 
         parent::__construct();
 
-        $this->displayName = $this->l('Pago Fácil SpA');
-        $desc ='Vende con distintos medios de pago en tu tienda de manera instantánea con Pago Fácil.';
-        $this->description = $this->l($desc);
-        $this->confirmUninstall = $this->l('Al desinstalar no podrás recibir pagos. ¿Estás seguro?');
+        $this->displayName = $this->l('Pago Facil SpA');
+        $this->description = $this->l('Sell ​​with different means of payment with Pago Facil');
+        $confirm = 'When uninstalling, you will not be able to receive payments. Are you sure?';
+        $this->confirmUninstall = $this->l($confirm);
         $this->limited_countries = array('CL');
         $this->limited_currencies = array('CLP');
         $this->ps_versions_compliancy = array('min' => '1.6', 'max' => _PS_VERSION_);
 
 
         if (!isset($this->token_secret) || !isset($this->token_service)) {
-            $this->warning = $this->l('Token Service y Token Secret deben de estar configurados para continuar.');
+            $this->warning = $this->l('Token Service and Token Secret they must be configured to continue.');
         }
     }
 
@@ -191,10 +191,10 @@ class PagoFacil extends PaymentModule
               'input' => array(
                   array(
                       'type' => 'switch',
-                      'label' => $this->l('Es desarrollo'),
+                      'label' => $this->l('is Development'),
                       'name' => 'PAGOFACIL16_ES_DEVEL',
                       'is_bool' => true,
-                      'desc' => $this->l('¿Quieres conectar al servidor de pruebas?'),
+                      'desc' => $this->l('Do you want to connect to the test server?'),
                       'values' => array(
                           array(
                               'id' => 'active_on',
@@ -212,17 +212,17 @@ class PagoFacil extends PaymentModule
                       'col' => 3,
                       'type' => 'text',
                       'prefix' => '<i class="icon icon-gear"></i>',
-                      'desc' => $this->l('Ingresa el token asignado a tu servicio.'),
+                      'desc' => $this->l('Enter the token assigned to your service.'),
                       'name' => 'PAGOFACIL16_TOKEN_SERVICE',
-                      'label' => $this->l('Token Servicio'),
+                      'label' => $this->l('Token Service'),
                   ),
                   array(
                       'col' => 3,
                       'type' => 'text',
                       'prefix' => '<i class="icon icon-key"></i>',
-                      'desc' => $this->l('Ingresa el token secreto asignado a tu servicio.'),
+                      'desc' => $this->l('Enter the token assigned to your service.'),
                       'name' => 'PAGOFACIL16_TOKEN_SECRET',
-                      'label' => $this->l('Token Secreto'),
+                      'label' => $this->l('Token Secret'),
                   )
               ),
               'submit' => array(
@@ -293,7 +293,6 @@ class PagoFacil extends PaymentModule
 
         return $this->display(__FILE__, 'views/templates/hook/payment.tpl');
     }
-
     /**
      * This hook is used to display the order confirmation page.
      */
@@ -337,7 +336,7 @@ class PagoFacil extends PaymentModule
             $order_state->paid = false;
             $order_state->deleted = false;
             $lang = (int)Configuration::get('PS_LANG_DEFAULT');
-            $order_state->name = array( $lang => pSQL($this->l('Pago Fácil - Pendiente de Pago')));
+            $order_state->name = array( $lang => pSQL($this->l('Pago Facil - Outstanding')));
             if ($order_state->add()) {
                 // We save the order State ID in Configuration database
                 Configuration::updateValue('PS_OS_PAGOFACIL_PENDING_PAYMENT', $order_state->id);

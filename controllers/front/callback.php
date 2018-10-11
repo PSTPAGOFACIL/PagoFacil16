@@ -30,17 +30,14 @@ class PagoFacilCallbackModuleFrontController extends ModuleFrontController
 
     public function initContent()
     {
-        $response = Tools::file_get_contents("php://input");
+        //$response = Tools::file_get_contents("php://input");
 
         $config = Configuration::getMultiple(array('PAGOFACIL16_TOKEN_SERVICE', 'PAGOFACIL16_TOKEN_SECRET'));
         $this->token_service = $config['PAGOFACIL16_TOKEN_SERVICE'];
         $this->token_secret = $config['PAGOFACIL16_TOKEN_SECRET'];
 
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $this->procesarCallback($response);
-            $protocol = (isset($_SERVER['SERVER_PROTOCOL']) ? $_SERVER['SERVER_PROTOCOL'] : 'HTTP/1.0');
-            $header = $protocol  . ' 200 OK';
-            header($header);
+            $this->procesarCallback($_POST);
         } else {
             error_log("NO SE INGRESA POR POST (405)");
         }

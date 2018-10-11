@@ -125,7 +125,7 @@ class PagoFacilRedirectModuleFrontController extends ModuleFrontController
         $request->shop_country =  Context::getContext()->language->iso_code;
         $request->session_id = date('Ymdhis').rand(0, 9).rand(0, 9).rand(0, 9);
         $transaction = new Transaction($request);
-          if ($esDevel) {
+        if ($esDevel) {
             $transaction->environment = 'DESARROLLO';
         } else {
             $transaction->environment = 'PRODUCCION';

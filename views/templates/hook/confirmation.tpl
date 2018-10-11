@@ -36,7 +36,6 @@
 <p>
 	<br />- {l s='Reference' mod='pagofacil'} <span class="reference"> <strong>{$reference|escape:'html':'UTF-8'}</strong></span>
 	<br /><br />{l s='Please, try to order again.' mod='pagofacil'}
-	<br /><br />{l s='If you have questions, comments or concerns, please contact our' mod='pagofacil'} <a href="{$link->getPageLink('contact', true)|escape:'html':'UTF-8'}">{l s='expert customer support team.' mod='pagofacil'}</a>
 </p>
 {/if}
 <hr />
