@@ -74,9 +74,15 @@ class PagoFacil extends PaymentModule
         parent::__construct();
 
         $this->displayName = $this->l('Pago Facil SpA');
+<<<<<<< HEAD
         $this->description = $this->l('Sell ​​with different means of payment with Pago Facil');
         $confirm = 'When uninstalling, you will not be able to receive payments. Are you sure?';
         $this->confirmUninstall = $this->l($confirm);
+=======
+        $desc ='Sell ​​with different means of payment in your store instantaneously with Pago Facil.';
+        $this->description = $this->l($desc);
+        $this->confirmUninstall = $this->l('When uninstalling, you will not be able to receive payments. Are you sure?');
+>>>>>>> 7e0709638278e54d2c7c9b92f578f200d2117cc5
         $this->limited_countries = array('CL');
         $this->limited_currencies = array('CLP');
         $this->ps_versions_compliancy = array('min' => '1.6', 'max' => _PS_VERSION_);
