@@ -116,12 +116,13 @@ class PagoFacilRedirectModuleFrontController extends ModuleFrontController
         $request->currency = $currency->iso_code;
         $request->reference = $order;
         $request->customer_email =  $customer->email;
-        $request->url_complete = $this->context->link->getModuleLink(
-            'pagofacil',
-            'confirmation'
-        )."&secure_key=$secure_key&cart_id=$cart_id";
+        //  $request->url_complete = $this->context->link->getModuleLink(
+        //      'pagofacil',
+        //     'confirmation'
+        //  )."&secure_key=$secure_key&cart_id=$cart_id";
+         $request->url_complete = _PS_BASE_URL_.__PS_BASE_URI__."/index.php?fc=module&module=pagofacil&controller=confirmation&secure_key=$secure_key&cart_id=$cart_id";
         $request->url_cancel = __PS_BASE_URI__;
-        $request->url_callback =  $this->context->link->getModuleLink('pagofacil', 'callback');
+        $request->url_callback =_PS_BASE_URL_.__PS_BASE_URI__."/index.php?fc=module&module=pagofacil&controller=callback";
         $request->shop_country =  Context::getContext()->language->iso_code;
         $request->session_id = date('Ymdhis').rand(0, 9).rand(0, 9).rand(0, 9);
         $transaction = new Transaction($request);
